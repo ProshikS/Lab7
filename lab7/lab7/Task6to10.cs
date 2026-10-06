@@ -5,7 +5,7 @@ using System.Text;
 
 public static class LabTasks6To10
 {
-    // ========== ЗАДАНИЕ 6 ==========
+    //Задание 6
     public static void Task6()
     {
         Console.WriteLine("Введите первый упорядоченный список (числа через пробел):");
@@ -98,7 +98,7 @@ public static class LabTasks6To10
         Console.WriteLine();
     }
 
-    // ========== ЗАДАНИЕ 7 ==========
+    //Задание 7
     public static void Task7()
     {
         Console.WriteLine("Введите элементы списка (числа через пробел):");
@@ -148,7 +148,7 @@ public static class LabTasks6To10
         }
     }
 
-    // ========== ЗАДАНИЕ 8 ==========
+    //Задание 8
     public static void Task8()
     {
         Console.Write("Введите количество блюд: ");
@@ -211,7 +211,7 @@ public static class LabTasks6To10
         }
     }
 
-    // ========== ЗАДАНИЕ 9 ==========
+    // Задание 9
     public static void Task9()
     {
         string path = "task9.txt";
@@ -264,70 +264,103 @@ public static class LabTasks6To10
         Console.WriteLine();
     }
 
-    // ========== ЗАДАНИЕ 10 ==========
+    // Задание 10
     public static void Task10()
     {
-        Console.Write("Введите количество участников: ");
-        int n = LabTasks1To5.ReadIntPositive();
-        List<Participant> participants = new List<Participant>();
-        for (int i = 0; i < n; i++)
+        string inputPath = "task10_input.txt";
+        if (!File.Exists(inputPath))
         {
-            Console.WriteLine($"Участник {i + 1}: введите Фамилия Имя Балл1 Балл2 Балл3 Балл4");
-            string input = Console.ReadLine();
-            string[] parts = input.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            if (parts.Length != 6)
+            File.WriteAllLines(inputPath, new string[]
             {
-                Console.WriteLine("Ошибка! Неверный формат. Попробуйте снова.");
-                i--;
-                continue;
-            }
-            string lastName = parts[0];
-            string firstName = parts[1];
-            int[] scores = new int[4];
-            bool valid = true;
-            for (int j = 0; j < 4; j++)
-            {
-                if (int.TryParse(parts[2 + j], out int score) && score >= 0 && score <= 10)
-                {
-                    scores[j] = score;
-                }
-                else
-                {
-                    valid = false;
-                    break;
-                }
-            }
-            if (!valid)
-            {
-                Console.WriteLine("Ошибка! Баллы должны быть целыми числами от 0 до 10. Попробуйте снова.");
-                i--;
-                continue;
-            }
-            participants.Add(new Participant(lastName, firstName, scores));
+                "4",
+                "Иванов Сергей 10 9 8 7",
+                "Петров Антон 9 8 7 6",
+                "Сидоров Юрий 8 7 6 5",
+                "Кузнецов Олег 7 6 5 4"
+            });
+            Console.WriteLine("Создан файл task10_input.txt с примером данных.");
         }
 
-        participants.Sort(CompareParticipants);
+        List<Participant> participants = new List<Participant>();
+        using (StreamReader sr = new StreamReader(inputPath))
+        {
+            string firstLine = sr.ReadLine();
+            if (firstLine == null || !int.TryParse(firstLine, out int n) || n <= 0)
+            {
+                Console.WriteLine("Ошибка: первая строка должна содержать количество участников.");
+                return;
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+                string line = sr.ReadLine();
+                if (line == null)
+                {
+                    Console.WriteLine("Ошибка: недостаточно строк в файле.");
+                    break;
+                }
+
+                string[] parts = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length != 6)
+                {
+                    Console.WriteLine($"Строка {i + 2} имеет неверный формат, пропущена.");
+                    continue;
+                }
+
+                int[] scores = new int[4];
+                bool valid = true;
+                for (int j = 0; j < 4; j++)
+                {
+                    if (!int.TryParse(parts[2 + j], out scores[j]) || scores[j] < 0 || scores[j] > 10)
+                    {
+                        valid = false;
+                        break;
+                    }
+                }
+                if (!valid)
+                {
+                    Console.WriteLine($"Строка {i + 2} содержит некорректные баллы, пропущена.");
+                    continue;
+                }
+
+                participants.Add(new Participant(parts[0], parts[1], scores));
+            }
+        }
 
         if (participants.Count == 0)
         {
-            Console.WriteLine("Нет участников.");
+            Console.WriteLine("Нет корректных записей.");
             return;
         }
 
-        int thresholdScore;
+        // Сортировка пузырьком
+        for (int i = 0; i < participants.Count - 1; i++)
+        {
+            for (int j = 0; j < participants.Count - 1 - i; j++)
+            {
+                if (participants[j].TotalScore < participants[j + 1].TotalScore)
+                {
+                    Participant temp = participants[j];
+                    participants[j] = participants[j + 1];
+                    participants[j + 1] = temp;
+                }
+            }
+        }
+
+        int threshold;
         if (participants.Count >= 3)
         {
-            thresholdScore = participants[2].TotalScore;
+            threshold = participants[2].TotalScore;
         }
         else
         {
-            thresholdScore = participants[participants.Count - 1].TotalScore;
+            threshold = participants[participants.Count - 1].TotalScore;
         }
 
         Console.WriteLine("Лучшие участники:");
         foreach (Participant p in participants)
         {
-            if (p.TotalScore >= thresholdScore)
+            if (p.TotalScore >= threshold)
             {
                 Console.WriteLine($"{p.LastName} {p.FirstName} - {p.TotalScore}");
             }
@@ -336,11 +369,6 @@ public static class LabTasks6To10
                 break;
             }
         }
-    }
-
-    private static int CompareParticipants(Participant p1, Participant p2)
-    {
-        return p2.TotalScore.CompareTo(p1.TotalScore);
     }
 
     private class Participant

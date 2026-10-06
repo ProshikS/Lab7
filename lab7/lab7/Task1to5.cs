@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 public static class LabTasks1To5
 {
-    // ========== ЗАДАНИЕ 1 ==========
+    // Задание 1
     public static void Task1()
     {
         string path = "task1.txt";
@@ -23,6 +23,7 @@ public static class LabTasks1To5
 
         int max = numbers[0];
         int min = numbers[0];
+        //нахождение минимального и максимального эл-тов
         for (int i = 1; i < numbers.Length; i++)
         {
             if (numbers[i] > max) max = numbers[i];
@@ -63,7 +64,7 @@ public static class LabTasks1To5
         return numbers.ToArray();
     }
 
-    // ========== ЗАДАНИЕ 2 ==========
+    // Задание 2
     public static void Task2()
     {
         string path = "task2.txt";
@@ -82,6 +83,7 @@ public static class LabTasks1To5
         }
 
         int min = numbers[0];
+        //поиск минимального элемента
         for (int i = 1; i < numbers.Length; i++)
         {
             if (numbers[i] < min) min = numbers[i];
@@ -128,7 +130,7 @@ public static class LabTasks1To5
         return numbers.ToArray();
     }
 
-    // ========== ЗАДАНИЕ 3 ==========
+    // Задание 3
     public static void Task3()
     {
         string inputPath = "task3_input.txt";
@@ -144,7 +146,7 @@ public static class LabTasks1To5
                 "Четвертая строка",
                 "Пятая строка"
             });
-            Console.WriteLine("Создан файл task3_input.txt с примером текста.");
+            Console.WriteLine("Создан файл task3_input.txt");
         }
 
         Console.Write("Введите символ, с которого должны начинаться строки: ");
@@ -168,7 +170,7 @@ public static class LabTasks1To5
         Console.WriteLine(File.ReadAllText(outputPath));
     }
 
-    // ========== ЗАДАНИЕ 4 ==========
+    //Задание 4
     public static void Task4()
     {
         string inputPath = "task4_input.bin";
@@ -187,6 +189,7 @@ public static class LabTasks1To5
         using (BinaryReader reader = new BinaryReader(File.Open(inputPath, FileMode.Open)))
         using (BinaryWriter writer = new BinaryWriter(File.Open(outputPath, FileMode.Create)))
         {
+            
             while (reader.BaseStream.Position < reader.BaseStream.Length)
             {
                 int num = reader.ReadInt32();
@@ -221,7 +224,7 @@ public static class LabTasks1To5
         }
     }
 
-    // ========== ЗАДАНИЕ 5 ==========
+    //Задание 5
     public static void Task5()
     {
         string path = "task5.xml";
@@ -259,18 +262,16 @@ public static class LabTasks1To5
 
         for (int i = 0; i < count; i++)
         {
-            Passenger p = new Passenger();
-            p.Name = names[rnd.Next(names.Length)] + " " + (i + 1);
+            string passengerName = names[rnd.Next(names.Length)] + " " + (i + 1);
             int itemCount = rnd.Next(1, 4);
-            p.Items = new BaggageItem[itemCount];
+            BaggageItem[] baggages = new BaggageItem[itemCount];
             for (int j = 0; j < itemCount; j++)
             {
-                BaggageItem item = new BaggageItem();
-                item.Name = items[rnd.Next(items.Length)];
-                item.Weight = Math.Round(rnd.NextDouble() * 10, 2);
-                p.Items[j] = item;
+                string itemName = items[rnd.Next(items.Length)];
+                double weight = Math.Round(rnd.NextDouble() * 10, 2);
+                baggages[j] = new BaggageItem(itemName, weight);
             }
-            passengers.Add(p);
+            passengers.Add(new Passenger(passengerName, baggages));
         }
 
         XmlSerializer serializer = new XmlSerializer(typeof(List<Passenger>));
@@ -289,7 +290,7 @@ public static class LabTasks1To5
         }
     }
 
-    // ========== ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ ВВОДА ==========
+    // Проверки ввода
     public static int ReadInt()
     {
         while (true)
@@ -344,15 +345,63 @@ public static class LabTasks1To5
     }
 }
 
-// ========== СТРУКТУРЫ ДЛЯ ЗАДАНИЯ 5 ==========
+// Структуры для пятого задания
 public struct BaggageItem
 {
-    public string Name;
-    public double Weight;
+    private string itemName;
+    private double itemWeight;
+
+    public BaggageItem()
+    {
+        itemName = string.Empty;
+        itemWeight = 0;
+    }
+
+    public BaggageItem(string itemName, double itemWeight)
+    {
+        this.itemName = itemName;
+        this.itemWeight = itemWeight;
+    }
+
+    public string Name
+    {
+        get { return itemName; }
+        set { itemName = value; }
+    }
+
+    public double Weight
+    {
+        get { return itemWeight; }
+        set { itemWeight = value; }
+    }
 }
 
 public struct Passenger
 {
-    public string Name;
-    public BaggageItem[] Items;
+    private string passengerName;
+    private BaggageItem[] items;
+
+    public Passenger()
+    {
+        passengerName = string.Empty;
+        items = new BaggageItem[0];
+    }
+
+    public Passenger(string passengerName, BaggageItem[] items)
+    {
+        this.passengerName = passengerName;
+        this.items = items;
+    }
+
+    public string Name
+    {
+        get { return passengerName; }
+        set { passengerName = value; }
+    }
+
+    public BaggageItem[] Items
+    {
+        get { return items; }
+        set { items = value; }
+    }
 }

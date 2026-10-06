@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPassenger xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Passenger>
+    <Name>Иванов 1</Name>
+    <Items>
+      <BaggageItem>
+        <Name>Коробка</Name>
+        <Weight>7.45</Weight>
+      </BaggageItem>
+      <BaggageItem>
+        <Name>Чемодан</Name>
+        <Weight>5.55</Weight>
+      </BaggageItem>
+    </Items>
+  </Passenger>
+  <Passenger>
+    <Name>Кузнецов 2</Name>
+    <Items>
+      <BaggageItem>
+        <Name>Рюкзак</Name>
+        <Weight>1.51</Weight>
+      </BaggageItem>
+      <BaggageItem>
+        <Name>Чемодан</Name>
+        <Weight>8.27</Weight>
+      </BaggageItem>
+    </Items>
+  </Passenger>
+  <Passenger>
+    <Name>Смирнов 3</Name>
+    <Items>
+      <BaggageItem>
+        <Name>Пакет</Name>
+        <Weight>1.99</Weight>
+      </BaggageItem>
+    </Items>
+  </Passenger>
+  <Passenger>
+    <Name>Кузнецов 4</Name>
+    <Items>
+      <BaggageItem>
+        <Name>Пакет</Name>
+        <Weight>9.72</Weight>
+      </BaggageItem>
+      <BaggageItem>
+        <Name>Рюкзак</Name>
+        <Weight>7.28</Weight>
+      </BaggageItem>
+    </Items>
+  </Passenger>
+  <Passenger>
+    <Name>Иванов 5</Name>
+    <Items>
+      <BaggageItem>
+        <Name>Пакет</Name>
+        <Weight>5.4</Weight>
+      </BaggageItem>
+    </Items>
+  </Passenger>
+</ArrayOfPassenger>

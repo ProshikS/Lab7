@@ -4,9 +4,10 @@ class Program
 {
     static void Main()
     {
+        //"меню" программы. Закрывается при вводе 0
         while (true)
         {
-            Console.WriteLine("\n\nВыберите задание:");
+            Console.WriteLine("Выберите задание:");
             Console.WriteLine("1 - Задание 1");
             Console.WriteLine("2 - Задание 2");
             Console.WriteLine("3 - Задание 3");
@@ -37,7 +38,7 @@ class Program
                 default: Console.WriteLine("Неверный выбор."); break;
             }
 
-
+            Console.WriteLine("\n\n");
         }
     }
 }
